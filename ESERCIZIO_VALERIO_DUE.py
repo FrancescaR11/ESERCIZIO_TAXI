@@ -15,7 +15,7 @@ from datetime import datetime
 parser=argparse.ArgumentParser()
 
 parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
-                    type=str, default='./yellow_tripdata_2020-02.csv')
+                    type=str, default='./dati/yellow_tripdata_2020-02.csv')
 
 args=parser.parse_args()
 
