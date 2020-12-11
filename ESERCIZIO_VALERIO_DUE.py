@@ -17,9 +17,12 @@ parser=argparse.ArgumentParser()
 
 parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
                     type=str, default='./dati/yellow_tripdata_2020-02.csv')
+<<<<<<< HEAD
 
 parser.add_argument("-i2", "--input_data2", help="Complete path to the file containing taxi+_zone_lookup",
                     type=str, default='./dati/taxi+_zone_lookup.csv')
+=======
+>>>>>>> 98b5e9c06ec50e57019afa699c0fc1eb045a069b
 
 args=parser.parse_args()
 
