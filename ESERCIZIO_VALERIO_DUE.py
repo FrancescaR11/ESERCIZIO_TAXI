@@ -12,30 +12,42 @@ from numpy import var
 import argparse
 from datetime import datetime
 import numpy as np
+import sys
 
-parser=argparse.ArgumentParser()
+'''
+Uso argparse per la lettura dei file, con "i" che scandisce i mesi.
+Se non è presente il file dell' i-esimo mese sollevo un eccezione che ci restituisce 'Il file non esiste' 
+'''
 
-parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
-                    type=str, default='./dati/yellow_tripdata_2020-02.csv')
-<<<<<<< HEAD
+i=1
+df=pd.DataFrame()
+while i in range(13):
+ try:
+     
+       parser=argparse.ArgumentParser()
+       parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
+                    type=str, default='./dati/yellow_tripdata_2020-'+'0'+str(i)+'.csv')
+       args=parser.parse_args()
+       df=df.append(pd.read_csv(args.input_data))
+       i+=1
+       
+ except FileNotFoundError:
+          print('Il file non esiste')
+          i+=1
 
-parser.add_argument("-i2", "--input_data2", help="Complete path to the file containing taxi+_zone_lookup",
-                    type=str, default='./dati/taxi+_zone_lookup.csv')
-=======
->>>>>>> 98b5e9c06ec50e57019afa699c0fc1eb045a069b
 
-args=parser.parse_args()
+         
 
 # salvo i dati su una struttura di tipo DataFrame 
 
-df= pd.read_csv(args.input_data)
-df1=pd.read_csv(args.input_data2)
-# Altro meteodo
-# df= pd.read_csv('./yellow_tripdata_2020.csv', nrows=5)
 
-# mettere nel file git ignore la cartella dove si trovano i dati
+df1=pd.read_csv('taxi+_zone_lookup.csv')
 
-# trasformo i NaN in 0 
+
+
+# trasformo i NaN in 0 (farlo con un if)
+
+# fare for per lista delle colonne
 
 df['VendorID'].fillna(0, inplace=True)
 
@@ -61,20 +73,30 @@ df['payment_type'].fillna(0, inplace=True)
 #     data=datetime.strptime(list(df.loc[vendor,'tpep_pickup_datetime'])[i], '%Y-%m-%d %H:%M:%S')
 #     df2[vendor,'Inizio Corsa'][i]=(datetime.timestamp(data))
 
+'''
+Trasformo in timestamp le date di partenza delle corse. Imposto su tali date un anno, un mese e un giorno fissato così
+da poterle poi confrontare con una data (anno-mese-giorno 00:00:00) di riferimento ed estrarre solo la distanza temporale in ore, minuti e secondi
+'''
+
+# usare apply
+
 for i in range(1000):
     data=datetime.strptime(df['tpep_pickup_datetime'][i],'%Y-%m-%d %H:%M:%S')
     data=data.replace(day=1,month=2)
     df.loc[i,'Inizio Corsa']=(datetime.timestamp(data))
 
-#creato un unico dataframe
+#creato un unico dataframe che associa alla PULocationID il borough corrispondente
 df1 = df1.rename({'LocationID': 'PULocationID'}, axis=1)
-df_merged = pd.merge(df, df1, on=['PULocationID'])
+df_merged = pd.merge(df, df1, on=['PULocationID'], how= 'left')
     
-#Individuo fasce orarie
-#se sottraggo due date mi restituisce la distanza in secondi
-
+#imposto una data di riferimento
 ora_riferimento=datetime.timestamp(datetime.strptime('2020-02-01 00:00:00', '%Y-%m-%d %H:%M:%S'))
+
+#Individuo fasce orarie
 fasce_orarie=np.array(range(0,25))*3600
+
+#Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
+
 numero_passeggeri=[]
 for j in range(len(fasce_orarie)-1):
     passeggeri=0
