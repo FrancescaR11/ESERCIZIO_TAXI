@@ -15,7 +15,7 @@ import numpy as np
 import sys
 from Eliminazione_Nan import replace_Nan_with_zeros
 from Conteggio_passeggeri import count_passengers_hour
-
+from Conversione_timestamp import to_timestamp
 '''
 Uso argparse per la lettura dei file, con "i" che scandisce i mesi.
 Se non è presente il file dell' i-esimo mese sollevo un eccezione che ci restituisce 'Il file non esiste' 
@@ -48,8 +48,9 @@ df1=pd.read_csv('taxi+_zone_lookup.csv')
 replace_Nan_with_zeros(df)
        
 
-
 # Creo nuova colonna con datatime trasformato in timestemp
+
+df['Inizio Corsa']=df['tpep_pickup_datetime'].apply(to_timestamp) 
 
 
 # df.index=df['VendorID'];
@@ -69,13 +70,6 @@ da poterle poi confrontare con una data (anno-mese-giorno 00:00:00) di riferimen
 
 '''
 
-# usare apply
-
-for i in range(1000):
-    data=datetime.strptime(df['tpep_pickup_datetime'][i],'%Y-%m-%d %H:%M:%S')
-    data=data.replace(day=1,month=1,year=2020)
-    df.loc[i,'Inizio Corsa']=(datetime.timestamp(data))
-   
 
 #creato un unico dataframe che associa alla PULocationID il borough corrispondente
 
@@ -88,8 +82,8 @@ df_merged = pd.merge(df, df1, on=['PULocationID'],how='left')
 
 fasce_orarie=np.array(range(0,25))*3600
 
-#Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
 
+#Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
 
 numero_passeggeri=count_passengers_hour(df,fasce_orarie)
 
