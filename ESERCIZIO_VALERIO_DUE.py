@@ -13,6 +13,8 @@ import argparse
 from datetime import datetime
 import numpy as np
 import sys
+from Eliminazione_Nan import replace_Nan_with_zeros
+from Conteggio_passeggeri import count_passengers_hour
 
 '''
 Uso argparse per la lettura dei file, con "i" che scandisce i mesi.
@@ -36,27 +38,15 @@ while i in range(13):
           i+=1
 
 
-         
-
 
 df1=pd.read_csv('taxi+_zone_lookup.csv')
 
 
 
+# trasformo i NaN in 0 
 
-# trasformo i NaN in 0 (farlo con un if)
-
-# fare for per lista delle colonne
-
-df['VendorID'].fillna(0, inplace=True)
-
-df['passenger_count'].fillna(0, inplace=True)
-
-df['RatecodeID'].fillna(0, inplace=True)
-
-df['store_and_fwd_flag'].fillna(0, inplace=True)
-
-df['payment_type'].fillna(0, inplace=True)
+replace_Nan_with_zeros(df)
+       
 
 
 # Creo nuova colonna con datatime trasformato in timestemp
@@ -76,14 +66,14 @@ df['payment_type'].fillna(0, inplace=True)
 '''
 Trasformo in timestamp le date di partenza delle corse. Imposto su tali date un anno, un mese e un giorno fissato così
 da poterle poi confrontare con una data (anno-mese-giorno 00:00:00) di riferimento ed estrarre solo la distanza temporale in ore, minuti e secondi
-<<<<<<< HEAD
+
 '''
 
 # usare apply
 
 for i in range(1000):
     data=datetime.strptime(df['tpep_pickup_datetime'][i],'%Y-%m-%d %H:%M:%S')
-    data=data.replace(day=1,month=2,year=2020)
+    data=data.replace(day=1,month=1,year=2020)
     df.loc[i,'Inizio Corsa']=(datetime.timestamp(data))
    
 
@@ -93,25 +83,15 @@ df1 = df1.rename({'LocationID': 'PULocationID'}, axis=1)
 df_merged = pd.merge(df, df1, on=['PULocationID'],how='left')
     
 
-#imposto una data di riferimento
-ora_riferimento=datetime.timestamp(datetime.strptime('2020-02-01 00:00:00', '%Y-%m-%d %H:%M:%S'))
 
 #Individuo fasce orarie
+
 fasce_orarie=np.array(range(0,25))*3600
 
 #Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
 
-numero_passeggeri=[]
-for j in range(len(fasce_orarie)-1):
-    passeggeri=0
-    for i in range(1000):
-        
-        #tutte le corse che cadono dalle 00:00 alle 01:00
-        if fasce_orarie[j]<(abs(df['Inizio Corsa'][i]-ora_riferimento))<fasce_orarie[j+1]:
-            
-             passeggero=int(df['passenger_count'][i])
-             passeggeri+=passeggero
-    numero_passeggeri.append(passeggeri)
+
+numero_passeggeri=count_passengers_hour(df,fasce_orarie)
 
 
 
