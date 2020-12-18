@@ -77,15 +77,24 @@ df1 = df1.rename({'LocationID': 'PULocationID'}, axis=1)
 df_merged = pd.merge(df, df1, on=['PULocationID'],how='left')
     
 
+#Estraggo il numero di borough
+boroughs=list(df_merged['Borough'].unique())
+
+
 
 #Individuo fasce orarie
 
 fasce_orarie=np.array(range(0,25))*3600
 
 
+# for k in range(len(boroughs)):
+k=1
+df_merged=df_merged.loc[(df_merged['Borough'] == boroughs[k])]
+
+
 #Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
 
-numero_passeggeri=count_passengers_hour(df,fasce_orarie)
+numero_passeggeri=count_passengers_hour(df_merged,fasce_orarie)
 
 
 
