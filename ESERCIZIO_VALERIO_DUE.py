@@ -17,6 +17,7 @@ from Eliminazione_Nan import replace_Nan_with_zeros
 from Conteggio_passeggeri import count_passengers_hour
 from Conversione_timestamp import to_timestamp
 import matplotlib.pyplot as plt
+from Conteggio_passeggeri import count_max_passengers
 '''
 Uso argparse per la lettura dei file, con "i" che scandisce i mesi.
 Se non è presente il file dell' i-esimo mese sollevo un eccezione che ci restituisce 'Il file non esiste' 
@@ -93,11 +94,12 @@ fasce_orarie=np.array(range(0,25))*3600
 
 df_passeggeri=count_passengers_hour(df_merged,boroughs,fasce_orarie)
 
+
+
+    
 colori= ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
-plt.figure(figsize=(24,20))
-
-
+plt.figure(figsize=(24,20))    
 
 for k in range(len(boroughs)):
     plt.subplot(4,2,k+1)
@@ -105,7 +107,7 @@ for k in range(len(boroughs)):
     plt.grid(True)
     plt.ylabel('Numero passeggeri')
     plt.xlabel('Fasce orarie')
-    plt.ylim((0, 1500))
+    plt.ylim(0, count_max_passengers(boroughs,df_passeggeri))
 
 
 plt.savefig('Grafico.png')

@@ -43,3 +43,12 @@ def count_passengers_hour(df_merged,boroughs,fasce_orarie):
         df_passeggeri[borough]=numero_passeggeri
     
     return df_passeggeri
+    
+
+def count_max_passengers(boroughs,df_passeggeri):
+    massimi=[]
+        
+    for k in range(len(boroughs)):
+      massimi.append(max(df_passeggeri[boroughs[k]]))
+      massimo=max(massimi)  
+    return massimo
