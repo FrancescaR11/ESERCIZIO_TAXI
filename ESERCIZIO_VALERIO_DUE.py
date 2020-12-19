@@ -87,14 +87,10 @@ boroughs=list(df_merged['Borough'].unique())
 fasce_orarie=np.array(range(0,25))*3600
 
 
-# for k in range(len(boroughs)):
-k=1
-df_merged=df_merged.loc[(df_merged['Borough'] == boroughs[k])]
-
 
 #Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista
 
-numero_passeggeri=count_passengers_hour(df_merged,fasce_orarie)
+df_passeggeri=count_passengers_hour(df_merged,boroughs,fasce_orarie)
 
 
 
