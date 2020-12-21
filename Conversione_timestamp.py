@@ -7,10 +7,18 @@ Created on Thu Dec 17 18:08:59 2020
 
 from datetime import datetime
 
+'''
+
+Trasformo in timestemp le date di partenza delle corse. Imposto su tali date un anno, un mese e un giorno fissato (2020-01-01),
+così da poterle poi confrontare con una data di riferimento ed un orario (2020-01-01 00:00:00) ed etrarre solo la distanza
+temporale in ore, minuti e secondi.
+
+'''
+
 def to_timestamp(x):
        
         date=datetime.strptime(x, '%Y-%m-%d %H:%M:%S')
-        date=date.replace(day=1,month=1,year=2020)
+        date=date.replace(day=1,month=1,year=2020) 
         date=datetime.timestamp(date)
         
         return date
