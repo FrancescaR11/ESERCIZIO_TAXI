@@ -18,7 +18,7 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
     ora_riferimento=datetime.timestamp(datetime.strptime('2020-01-01 00:00:00', '%Y-%m-%d %H:%M:%S'))
     
     #Creo un DataFrame vuoto che conterrà come index le fasce orarie e  come colonne il numero di passeggeri per ogni borough
-    df_passeggeri=pd.DataFrame()
+    df_passeggeri=pd.DataFrame(0,columns=boroughs, index=list(range(0,23)) )
     
     
     for borough in boroughs:
@@ -26,41 +26,40 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
           
         #Calcolo il numero di passeggeri per fascia oraria e li salvo in una lista   
         
-        numero_passeggeri=[]
+       # numero_passeggeri=[]
         fasce_orarie=[]
+        
         
         for j in range(len(vettore_temporale)-1):
                 
-                passeggeri=0 # Inizializzo il numero di passeggeri con il valore zero
+                #passeggeri=0 # Inizializzo il numero di passeggeri con il valore zero
                 
                 fasce_orarie.append(str(vettore_temporale[j]/3600)+'0' + '-' +str(vettore_temporale[j+1]/3600)+'0') # Creo la lista contenente le fasce orarie 
                 
-                for i in list(df_merged_b.index)[0:1000]: # Mi restringo ad un sotto DataFrame per velocizzare l'esecuzione
+                #for i in list(df_merged_b.index)[0:1000]: # Mi restringo ad un sotto DataFrame per velocizzare l'esecuzione
                 
-                    '''
+                '''
                     
-                    Calcolo la differenza in seocondi tra la corsa i-esima e l'ora di riferimento. 
-                     Se questo valore cade nell'intervallo definito da due elementi del vettore_temporale,
-                    ovvero in una fascia oraria, aggiungo a passeggeri il numero di passeggeri di quella corsa
+                Calcolo la differenza in seocondi tra la corsa i-esima e l'ora di riferimento. 
+                Se questo valore cade nell'intervallo definito da due elementi del vettore_temporale,
+                ovvero in una fascia oraria, aggiungo a passeggeri il numero di passeggeri di quella corsa
                     
-                    '''
+               '''
                     
-                    if vettore_temporale[j]<(abs(df_merged_b['Inizio Corsa'][i]-ora_riferimento))<vettore_temporale[j+1]:
+                df_2=df_merged_b.loc[(df_merged_b['Inizio Corsa']-ora_riferimento>=vettore_temporale[j]) & (df_merged_b['Inizio Corsa']-ora_riferimento<vettore_temporale[j+1])]
+               
+                
+                
                         
-                        
-                         passeggeri+=int(df_merged_b['passenger_count'][i])    
+                df_passeggeri.loc[j,borough] =  df_2['passenger_count'].sum()      
 
-                
-                numero_passeggeri.append(passeggeri)
        
-        df_passeggeri['indici']=fasce_orarie #Aggiungo 'fasce_orarie' come colonna al DataFrame di output e lo imposto come index
+    df_passeggeri['indici']=fasce_orarie #Aggiungo 'fasce_orarie' come colonna al DataFrame di output e lo imposto come index
         
-        df_passeggeri.index=fasce_orarie
+    df_passeggeri.index=fasce_orarie
         
-        del df_passeggeri['indici'] 
-        
-        df_passeggeri[borough]=numero_passeggeri # Aggiungo la colonna relativa al borough con il numero dei passeggeri
-    
+    del df_passeggeri['indici'] 
+                   
     return df_passeggeri
 
 
@@ -78,10 +77,6 @@ def count_max_passengers(boroughs,df_passeggeri):
       massimo=max(massimi)   # Calcolo il massimo tra i massimi di ogni borough
    
     return massimo # Restituisco il valore massimo da impostare come limite dell'asse y per il plot
-
-
-
-
 
 
 
