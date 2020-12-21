@@ -25,7 +25,7 @@ def count_passengers_hour(df_merged,boroughs,fasce_orarie):
                 passeggeri=0
                 orari.append(str(fasce_orarie[j]/3600)+'0' + '-' +str(fasce_orarie[j+1]/3600)+'0')
                 
-                for i in list(df_merged_b.index)[0:1000]:
+                for i in list(df_merged_b.index)[0:2000]:
                     
                     #tutte le corse che cadono dalle 00:00 alle 01:00 e così via
                     if fasce_orarie[j]<(abs(df_merged_b['Inizio Corsa'][i]-ora_riferimento))<fasce_orarie[j+1]:
