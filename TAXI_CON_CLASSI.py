@@ -160,7 +160,7 @@ class PlotFeatures:
             ''' 
             #plt.ylim(0, count_max_passengers(boroughs,df_passeggeri))
                 
-        figura=plt.savefig('Grafico.png') # Salvo la figura contenente tutti i subplot
+        figura=plt.savefig('./results/Grafico.png') # Salvo la figura contenente tutti i subplot
         
         return figura
 
