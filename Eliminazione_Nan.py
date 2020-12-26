@@ -15,8 +15,8 @@ In tal caso sostituisce i NaN con degli zeri.
 
 def replace_Nan_with_zeros(DataFrame):
  
-    nomi_colonne=list(DataFrame.columns)
+    nomi_colonne=list(DataFrame.columns) # Creo lista contenente i nomi delle colonne del DataFrame
 
-    for nome in nomi_colonne:
-     if DataFrame[nome].isnull().sum().sum() > 0:
-        DataFrame[nome].fillna(0, inplace=True)   
+    for nome in nomi_colonne: # Scandisco i nomi delle colonne del DataFrame
+     if DataFrame[nome].isnull().sum().sum() > 0: # Se la colonna considerata ha dei valori nulli...
+        DataFrame[nome].fillna(0, inplace=True)   #...li scostituisco con zero

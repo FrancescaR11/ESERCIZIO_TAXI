@@ -2,3 +2,4 @@ dati/yellow_tripdata_2020-02.csv
 .DS_Store
 __pycache__/*
 ESERCIZIO_VALERIO_DUE.py
+results/*
