@@ -89,7 +89,7 @@ class CleanData:
         df['Inizio Corsa']=df['tpep_pickup_datetime'].apply(to_timestamp) 
         
         #Importo il seconod DataFrame di Input
-        df1=pd.read_csv('taxi+_zone_lookup.csv')
+        df1=pd.read_csv('./dati/taxi+_zone_lookup.csv')
         
         #Per eseguire il merge, assegno alla colonna di df1 lo stesso nome della colonna  di df
         df1 = df1.rename({'LocationID': 'PULocationID'}, axis=1)
@@ -181,7 +181,7 @@ while i in range(13):
     
       parser=argparse.ArgumentParser()
       parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
-                    type=str, default='./dati/yellow_tripdata_2020-'+'0'+str(i)+'.csv')
+                    type=str, default='./dati_ridotti/yellow_tripdata_2020-'+'0'+str(i)+'.csv')
       args=parser.parse_args()
       reader = TaxiReader.create_instance(args.input_data)
       df = reader.get_list_of_taxi(df)
