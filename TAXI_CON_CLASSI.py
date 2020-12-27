@@ -67,7 +67,7 @@ class CSVReader(TaxiReader):
         
     def get_list_of_taxi(self,df):
            
-        df=df.append(pd.read_csv(args.input_data)) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese 
+        df=df.append(pd.read_csv(args.input_data , low_memory=False )) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese 
 
         return df # restituisco il DataFrame contente i dati di tutti i mesi fino a quello di indice i
 
