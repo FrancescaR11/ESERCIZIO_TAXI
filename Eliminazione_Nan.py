@@ -3,7 +3,7 @@
 """
 Created on Thu Dec 17 17:35:23 2020
 
-@author: francescaronci
+@author: francescaronci, gaiad
 """
 
 '''

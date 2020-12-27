@@ -2,7 +2,7 @@
 """
 Created on Sat Dec 26 15:11:07 2020
 
-@author: gaiad
+@author: gaiad, francescaronci
 """
 
 import argparse 

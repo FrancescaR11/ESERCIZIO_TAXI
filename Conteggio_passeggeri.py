@@ -3,7 +3,7 @@
 """
 Created on Thu Dec 17 17:49:30 2020
 
-@author: francescaronci
+@author: francescaronci, gaiad
 """
 from datetime import datetime
 import pandas as pd
