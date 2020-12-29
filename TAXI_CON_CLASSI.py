@@ -15,7 +15,8 @@ from Conteggio_passeggeri import count_passengers_hour
 from Conversione_timestamp import to_timestamp
 import matplotlib.pyplot as plt
 from Conteggio_passeggeri import count_max_passengers
-
+import os
+import time
 
 
 # Creo la classe astratta TaxiReader 
@@ -67,7 +68,7 @@ class CSVReader(TaxiReader):
         
     def get_list_of_taxi(self,df):
            
-        df=df.append(pd.read_csv(args.input_data , low_memory=False )) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese 
+        df=df.append(pd.read_csv(args.input_data+file , low_memory=False )) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese 
 
         return df # restituisco il DataFrame contente i dati di tutti i mesi fino a quello di indice i
 
@@ -172,24 +173,27 @@ Se non è presente il file dell' i-esimo mese sollevo un eccezione che ci restit
          
 '''
 
+start = time.perf_counter() #  Avvio conteggio del tempo di esecuzione
+
 df=pd.DataFrame()
     
-i=1 
 
-while i in range(13):
-  try:
-    
-      parser=argparse.ArgumentParser()
-      parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
-                    type=str, default='./dati_ridotti/yellow_tripdata_2020-'+'0'+str(i)+'.csv')
-      args=parser.parse_args()
-      reader = TaxiReader.create_instance(args.input_data)
-      df = reader.get_list_of_taxi(df)
-      i+=1
+parser=argparse.ArgumentParser()
+
+parser.add_argument("-i", "--input_data", help="Complete path to the file containing yellow_tripdata",
+                    type=str, default='./dati_ridotti/')
+
+args=parser.parse_args()
+
+dirs = os.listdir( args.input_data) # Creo lista dei file contenuti nella cartella specificata dal parser
+
+for file in dirs: # Leggo i file relativi ai dati di input contenuti nella cartella
+     
+    if (file != ('taxi+_zone_lookup.csv')) & (file != ('.DS_Store')) :
       
-  except FileNotFoundError:
-          print('Il file non esiste')
-          i+=1
+         reader = TaxiReader.create_instance(args.input_data+file)    
+       
+         df = reader.get_list_of_taxi(df)
 
     
 
@@ -202,4 +206,10 @@ df_passeggeri,boroughs=counter.passengers_counter(df_merged)
 
 plotter=PlotFeatures()
 figura=plotter.features_plotter(boroughs, df_passeggeri)
+
+elapsed= time.perf_counter() - start # Calcolo il tempo impiegato per l'esecuzione
+
+print ('Il tempo di esecuzione è' + ' ' +str(elapsed)) # Stampo il tempo impiegato per l'esecuzione
+
+
 
