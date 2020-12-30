@@ -7,7 +7,7 @@ Created on Thu Dec 17 17:49:30 2020
 """
 from datetime import datetime
 import pandas as pd
-
+from tqdm import tqdm
 '''
 Creo la funzione count_passengers_hours che prende in ingresso df_merged, DataFrame ottenuto con il merge dei due DataFrame di input,
 la lista di boroughs e l'array "vettore_temporale" contenente le fasce orarie espresse in secondi. Questa funzione restituisce df_passeggeri, DataFrame 
@@ -15,6 +15,7 @@ contenente come colonne i nomi dei boroughs e come righe le fasce orarie ed il n
 df_merged viene utilizzato per creare i sotto DataFrame relativi ai singoli borough, estratti dalla lista "boroughs", su cui, utilizzando il comando loc, individuiamo il 
 numero di passeggeri per ciasciuna fascia oraria.
 Il vettore temporale viene utilizzato per creare la lista di fasce orarie, che sarà utilizzata come index di df_passeggeri.
+Importo il modulo 'tqdm' per aggiornare l'utente sullo stato di esecuzione tramite barra di avanzamento.
 
 '''
 
@@ -30,9 +31,9 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
     df_passeggeri=pd.DataFrame(0,columns=boroughs, index=list(range(0,23)) )
     
     
-    for borough in boroughs: # Scandisco i borough uno alla volta
+    for i in tqdm(range(len(boroughs)),desc='Esecuzione conteggio passeggeri'): # Scandisco i borough uno alla volta e aggiorno la barra di avanzamento
         
-        df_merged_b=df_merged.loc[(df_merged['Borough'] == borough)] #Estraggo dal DataFrame un sotto DataFrame relativo al borough considerato
+        df_merged_b=df_merged.loc[(df_merged['Borough'] == boroughs[i])] #Estraggo dal DataFrame un sotto DataFrame relativo al borough considerato
           
         fasce_orarie=[] # Inizializzo lista vuota, che conterrà le fasce orarie
         
@@ -58,7 +59,7 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
                 
                 #Inserisco nel DataFrame di output la somma dei passeggeri della singola fascia oraria
                         
-                df_passeggeri.loc[j,borough] =  df_2['passenger_count'].sum()      
+                df_passeggeri.loc[j,boroughs[i]] =  df_2['passenger_count'].sum()      
 
        
     df_passeggeri['indici']=fasce_orarie #Aggiungo 'fasce_orarie' come colonna al DataFrame di output 
@@ -74,6 +75,7 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
 Creo la funzione count_max_passengers, che restituisce il massimo numero di passeggeri ottenuto tra tutti i boroughs e tra tutte le fasce orarie,
 prendendo in ingresso la lista di boroughs e df_passeggeri, DataFrame restituito dalla funzione count_passengers_hour. 
 Questa funzione ha lo scopo di riprodurre in scala il grafico contenente i subplot per ogni borough.
+Importo il modulo 'tqdm' per aggiornare l'utente sullo stato di esecuzione tramite barra di avanzamento.
 
 '''
   
@@ -82,7 +84,7 @@ def count_max_passengers(boroughs,df_passeggeri):
     
     massimi=[] # Inizializzo lista vuota, che conterrà i massimi per ogni colonna
         
-    for k in range(len(boroughs)): 
+    for k in tqdm(range(len(boroughs)),desc='Esecuzione conteggio valore massimo'): #Scandisco le colonne del DataFrame e aggiorno la barra di avanzamento
      
       massimi.append(max(df_passeggeri[boroughs[k]])) # Calcolo il massimo per ogni borough
       

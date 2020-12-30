@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from Conteggio_passeggeri import count_max_passengers
 import os
 import time
+from tqdm import tqdm
 
 
 # Creo la classe astratta TaxiReader 
@@ -87,7 +88,9 @@ class CleanData:
 
         replace_Nan_with_zeros(df)
         
-        df['Inizio Corsa']=df['tpep_pickup_datetime'].apply(to_timestamp) 
+        tqdm.pandas(desc='Esecuzione conversione timestamp') #Descrizione funzione barra di avanzamento
+        #Il metodo '.progress_apply()' viene utilizzato al posto del metodo tradizionale '.apply()' per visualizzare la barra di avanzamento
+        df['Inizio Corsa']=df['tpep_pickup_datetime'].progress_apply(to_timestamp) 
         
         #Importo il seconod DataFrame di Input
         df1=pd.read_csv('./dati/taxi+_zone_lookup.csv')
@@ -210,6 +213,5 @@ figura=plotter.features_plotter(boroughs, df_passeggeri)
 elapsed= time.perf_counter() - start # Calcolo il tempo impiegato per l'esecuzione
 
 print ('Il tempo di esecuzione è' + ' ' +str(elapsed)) # Stampo il tempo impiegato per l'esecuzione
-
 
 

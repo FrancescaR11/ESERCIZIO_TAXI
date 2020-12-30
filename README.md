@@ -10,3 +10,5 @@ Il programma per funzionare si avvale di alcune dipendenze ed è quindi necessar
 -pandas
 -numpy
 -matplotlib 
+-os
+Inoltre l'importazione di 'tqdm' permette all'utente di visualizzare la percentuale di dati già esaminata tramite una barra di avanzamento durante l'esecuzione.
