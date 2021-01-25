@@ -28,7 +28,7 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
     ora_riferimento=datetime.timestamp(datetime.strptime('2020-01-01 00:00:00', '%Y-%m-%d %H:%M:%S'))
     
     #Creo un DataFrame vuoto che conterrà come index le fasce orarie e  come colonne il numero di passeggeri per ogni borough
-    df_passeggeri=pd.DataFrame(0,columns=boroughs, index=list(range(0,23)) )
+    df_passeggeri=pd.DataFrame(0,columns=boroughs, index=list(range(0,24)) )
     
     
     for i in tqdm(range(len(boroughs)),desc='Esecuzione conteggio passeggeri'): # Scandisco i borough uno alla volta e aggiorno la barra di avanzamento
@@ -54,19 +54,16 @@ def count_passengers_hour(df_merged,boroughs,vettore_temporale):
                 
                 # Mi restringo al sotto DataFrame relativo ad una specifica fascia oraria
                 
-                df_2=df_merged_b.loc[(df_merged_b['Inizio Corsa']-ora_riferimento>=vettore_temporale[j]) & (df_merged_b['Inizio Corsa']-ora_riferimento<vettore_temporale[j+1])]
+                df_2=df_merged_b[(df_merged_b['Inizio Corsa']-ora_riferimento>=vettore_temporale[j]) & (df_merged_b['Inizio Corsa']-ora_riferimento<vettore_temporale[j+1])]
                
                 
                 #Inserisco nel DataFrame di output la somma dei passeggeri della singola fascia oraria
                         
                 df_passeggeri.loc[j,boroughs[i]] =  df_2['passenger_count'].sum()      
 
-       
-    df_passeggeri['indici']=fasce_orarie #Aggiungo 'fasce_orarie' come colonna al DataFrame di output 
         
     df_passeggeri.index=fasce_orarie # Imposto come index fasce_orarie
         
-    del df_passeggeri['indici'] # Elimino  colonna contenente fasce_orarie
                    
     return df_passeggeri # Restituisco df_passeggeri
 

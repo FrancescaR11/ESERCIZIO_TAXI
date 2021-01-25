@@ -164,9 +164,9 @@ class PlotFeatures:
             ''' 
             #plt.ylim(0, count_max_passengers(boroughs,df_passeggeri))
                 
-        figura=plt.savefig('./results/Grafico.png') # Salvo la figura contenente tutti i subplot
+        plt.savefig('./results/Grafico.png') # Salvo la figura contenente tutti i subplot
         
-        return figura
+        #return figura
 
 
 '''
@@ -210,7 +210,7 @@ counter=CountPassengers()
 df_passeggeri,boroughs=counter.passengers_counter(df_merged)
 
 plotter=PlotFeatures()
-figura=plotter.features_plotter(boroughs, df_passeggeri)
+plotter.features_plotter(boroughs, df_passeggeri)
 
 elapsed= time.perf_counter() - start # Calcolo il tempo impiegato per l'esecuzione
 
