@@ -69,7 +69,7 @@ class CSVReader(TaxiReader):
         
     def get_list_of_taxi(self,df):
            
-        df=df.append(pd.read_csv(args.input_data+file , low_memory=False )) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese 
+        df=df.append(pd.read_csv(args.input_data+self.filename , low_memory=False )) # appendo al DataFrame del mese i-1 quello dell' i-esimo mese
 
         return df # restituisco il DataFrame contente i dati di tutti i mesi fino a quello di indice i
 
@@ -171,8 +171,10 @@ class PlotFeatures:
 
 '''
         
-Uso argparse per la lettura dei file, con "i" che scandisce i mesi.
-Se non è presente il file dell' i-esimo mese sollevo un eccezione che ci restituisce 'Il file non esiste'. 
+Uso argparse e os per la lettura dei file.
+Per ogni file contenuto nella cartella specificata dall'utente creo l'oggetto reader che,
+tramite il metodo get_list_of_taxi(), appende al DataFrame "df" i dati contenuti in ciasucn file.
+
          
 '''
 
