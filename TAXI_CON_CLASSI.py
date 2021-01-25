@@ -166,7 +166,6 @@ class PlotFeatures:
                 
         plt.savefig('./results/Grafico.png') # Salvo la figura contenente tutti i subplot
         
-        #return figura
 
 
 '''
